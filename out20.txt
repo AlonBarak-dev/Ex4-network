@@ -1,6 +1,7 @@
+sudo tc qdisc change dev lo root netem loss 20%
 [+]Server socket created. 
 [+]Binding Successfull.
-Current: c
+Current: 
 [+]Listening...
 [+]Data written in the text file 
 [+]Listening...
@@ -11,7 +12,7 @@ Current: c
 [+]Data written in the text file 
 [+]Listening...
 [+]Data written in the text file 
-Cubic times: 62.728199
+Cubic times: 59.858803
 New: reno 
 [+]Listening...
 [+]Data written in the text file 
@@ -23,4 +24,4 @@ New: reno
 [+]Data written in the text file 
 [+]Listening...
 [+]Data written in the text file 
-Reno times: 65.234604
+Reno times: 57.448200
