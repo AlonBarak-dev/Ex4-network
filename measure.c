@@ -9,7 +9,7 @@
 #include <time.h>
 #include <math.h>
 #define SIZE 256
-#define PORT 8085
+#define PORT 8087
  
 
  /*
@@ -47,6 +47,15 @@ float write_file(int sock, char* file){
 int main (char* argc, char** argv)
 {
     
+    if (argc == 0)
+    {
+        argv[0] = "./measure";
+        argv[1] = "recv.txt";
+        argv[2] = "8087";
+    }
+    
+
+
     // initilaize variables   
     char *ip = "127.0.0.1";
     int port = atoi(argv[1]);

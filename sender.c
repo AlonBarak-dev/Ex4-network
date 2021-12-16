@@ -26,7 +26,12 @@ void send_file(FILE *fp, int sock){
 
 int main(char* argc, char* argv[]){
 
-
+ if (argc == 0)
+    {
+        argv[0] = "./sender";
+        argv[1] = "100mb.txt";
+        argv[2] = "8087";
+    }
   
 for (int i = 0; i < 5; i++)
 {
