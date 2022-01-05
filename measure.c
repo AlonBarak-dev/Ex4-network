@@ -13,10 +13,9 @@
  
 
  /*
-    this method responsible for receiving files/data from the client.
-    it save the files as well
+    this method is responsible for saving the contents of the file to a txt file
  */
-float write_file(int sock, char* file){
+float write_file(int sock, char* file) {
     int n;
     FILE *fp;
     char *filename = file;
@@ -25,6 +24,7 @@ float write_file(int sock, char* file){
     float time = 0;
     clock_t before = clock();
     fp = fopen(filename, "w");
+
     while (1) { 
         n = recv(sock, buffer, SIZE, 0);
         if (n <= 0){
@@ -47,7 +47,7 @@ float write_file(int sock, char* file){
 int main (char* argc, char** argv)
 {
     
-    if (argc == 0)
+    if (argc == 0)      // sets defalt arguments in case the user didnt send any
     {
         argv[0] = "./measure";
         argv[1] = "recv.txt";
@@ -57,13 +57,16 @@ int main (char* argc, char** argv)
 
 
     // initilaize variables   
-    char *ip = "127.0.0.1";
-    int port = atoi(argv[1]);
+    char *ip = "127.0.0.1";     // ip address of the local host
+    int port = atoi(argv[1]);   // use the given PORT
     int e;
+
+    // creating socket variables
     socklen_t len;
     int sockfd, new_sock;
     struct sockaddr_in server_addr, new_addr;
     socklen_t addr_size;
+    
     char buffer[SIZE];
     char buf[SIZE];
 
@@ -89,7 +92,7 @@ int main (char* argc, char** argv)
     if(e<0) // throw error if connection is not valid
     {
         perror("Error in Binding");
-        exit(1);
+        exit(1); //exit if failed
     }
     printf("Binding Successfull.\n");
     
@@ -107,23 +110,23 @@ int main (char* argc, char** argv)
         e = listen(sockfd, 10);
         if(e==0)
         {
-            printf("Listening...\n");
+            printf("Listening...\n");   //started listening
         }
         else 
         {
-            perror("Error in Binding");
-            exit(1);
+            perror("Error in Binding"); 
+            exit(1);    //exit if a binding error occured
         }
-        addr_size = sizeof(new_addr);
-        new_sock = accept(sockfd,(struct sockaddr*)&new_addr, &addr_size);
+        addr_size = sizeof(new_addr);   //gets the size of the new address
+        new_sock = accept(sockfd,(struct sockaddr*)&new_addr, &addr_size);  //create a new socket
 
-        write_file(new_sock,argv[2]);
+        write_file(new_sock,argv[2]);   //writes the content of the received file to a new file
         printf("Data written in the text file \n");
         time_t delta = clock() - before;            // stop counting
         sum += delta;
     }
-    sum = sum * 1000 / CLOCKS_PER_SEC;
-    avg = sum / 5;
+    sum = sum * 1000 / CLOCKS_PER_SEC;      //convert from seconds to miliseconds
+    avg = sum / 5;                          //to get the average we devide the sum by the number of calls (5)
     printf("Cubic times: %f\n",avg);        // print the avarage time took to reveive 5 files
     
 
@@ -135,7 +138,7 @@ int main (char* argc, char** argv)
     // checking if the socket is valid using reno
     if(setsockopt(sockfd,IPPROTO_TCP,TCP_CONGESTION,buf, len)!=0){
         perror("getsocket");
-        return -1;
+        return -1;  //exit if socket failed
     }
     printf("New: %s \n",buf);
 
@@ -150,23 +153,23 @@ int main (char* argc, char** argv)
         e = listen(sockfd, 10);
         if(e==0)
         {
-            printf("Listening...\n");
+            printf("Listening...\n");   //starts listening
         }
         else 
         {
             perror("Error in Binding");
-            exit(1);
+            exit(1);    //exit if an error in binding occured
         }
-        addr_size = sizeof(new_addr);
-        new_sock = accept(sockfd,(struct sockaddr*)&new_addr, &addr_size);
+        addr_size = sizeof(new_addr);   //gets the size of the address
+        new_sock = accept(sockfd,(struct sockaddr*)&new_addr, &addr_size); //creates a new socket
 
-        write_file(new_sock,argv[2]);
+        write_file(new_sock,argv[2]);   //writes the content of the received file to a new file
         printf("Data written in the text file \n");
         time_t delta = clock() - before;
         sum += delta;
     }
-    sum = sum*1000 / CLOCKS_PER_SEC;
-    avg = sum / 5;
+    sum = sum*1000 / CLOCKS_PER_SEC;    //convert from seconds to miliseconds
+    avg = sum / 5;                      //to get the average we devide the sum by the number of calls (5)
     printf("Reno times: %f\n",avg);     // print the avg time took to receive 5 files using reno
 
 
